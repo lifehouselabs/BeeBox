@@ -7,6 +7,7 @@ import android.speech.tts.UtteranceProgressListener
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import java.util.Locale
 import kotlin.random.Random
 
@@ -17,11 +18,13 @@ class AudioEngine(context: Context) : TextToSpeech.OnInitListener {
     private val random = Random(System.currentTimeMillis())
     
     init {
-        try {
-            tts = TextToSpeech(context, this)
-        } catch (e: Exception) {
-            // TTS might not be available on this emulator
-            isReady = false
+        kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.IO).launch {
+            try {
+                tts = TextToSpeech(context, this@AudioEngine)
+            } catch (e: Exception) {
+                // TTS might not be available on this emulator
+                isReady = false
+            }
         }
     }
     

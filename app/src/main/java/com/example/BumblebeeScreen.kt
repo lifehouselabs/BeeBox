@@ -23,11 +23,17 @@ import com.example.ui.theme.DarkSurface
 
 
 
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.ViewModelProvider
+import android.app.Application
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BumblebeeScreen(
-    viewModel: BumblebeeViewModel = viewModel()
-) {
+fun BumblebeeScreen() {
+    val context = LocalContext.current
+    val viewModel: BumblebeeViewModel = viewModel(
+        factory = ViewModelProvider.AndroidViewModelFactory.getInstance(context.applicationContext as Application)
+    )
     
     val inputText by viewModel.inputText.collectAsStateWithLifecycle()
     val clips by viewModel.clips.collectAsStateWithLifecycle()
